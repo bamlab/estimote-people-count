@@ -71,7 +71,7 @@ angular.module('starter', ['ionic', 'Parse'])
       var nb = 0;
       for (var i = result.length - 1; i >= 0; i--) {
         console.log(Date.now()-result[i].lastDetection);
-        if ( result[i].lastDetection > Date.now()-1000 ) {
+        if ( result[i].lastDetection > Date.now()-1000*5 ) {
           nb += 1;
         }
       };
