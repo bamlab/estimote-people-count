@@ -66,7 +66,17 @@ angular.module('starter', ['ionic', 'Parse'])
   $scope.refreshNbUser = function() { 
     console.log('in refreshNbUser');
     //TODO: call server to get nb user in meeting room
-    $scope.nbUserInMeetingRoom += 1;
+    Person.query().then(function (result) {
+      console.log(result);
+      var nb = 0;
+      for (var i = result.length - 1; i >= 0; i--) {
+        console.log(Date.now()-result[i].lastDetection);
+        if ( result[i].lastDetection > Date.now()-1000 ) {
+          nb += 1;
+        }
+      };
+      $scope.nbUserInMeetingRoom = nb;
+    })
   };
   
   $ionicPlatform.ready(function() {
@@ -82,19 +92,30 @@ angular.module('starter', ['ionic', 'Parse'])
 
           for (var i = result.beacons.length - 1; i >= 0; i--) {
              //if( result.beacons[i].major == 53832 && result.beacons[i].minor==19603) {
-             if( result.beacons[i].major == 54119 && result.beacons[i].minor==30134) {
+             if( result.beacons[i].major == 53832 && result.beacons[i].minor==19603) {
                 //console.log('found meeting room beacon '+result.beacons[i].distance+' meters away');
                 if(result.beacons[i].distance<2) {
                   console.log('User '+userDeveiceId+' is now in the meeting room!');
                   //TODO: indicates to server you are in the meeting room
-                  var person = new Person({
-                    deviceId: userDeveiceId,
-                    lastDetection: Date.now()
-                  });
-                  person.isNew() === true;
-                  person.objectId == null;
-                  person.save().then(function (_person) {
-                    console.log(_person);
+                  //Check if user allready exists in base
+                  Person.query().then(function (result) {
+                    console.log(result);
+                    var person = null;
+                    for (var i = result.length - 1; i >= 0; i--) {
+                     if ( result[i].deviceId == userDeveiceId ) {
+                        person = result[i];
+                        person.lastDetection = Date.now();
+                     }
+                    };
+                    if(!person) {
+                      person = new Person({
+                        deviceId: userDeveiceId,
+                        lastDetection: Date.now()
+                      });
+                    }
+                    person.save().then(function (_person) {
+                      console.log(_person);
+                    })
                   })
                 }
              } 
