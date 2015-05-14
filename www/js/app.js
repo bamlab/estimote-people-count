@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('starter', ['ionic'])
+angular.module('starter', ['ionic', 'Parse'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -39,8 +39,57 @@ angular.module('starter', ['ionic'])
     
   });
 })
-.controller('homeCtrl',function($scope){
-  
+
+.config(function (ParseProvider) {
+  ParseProvider.initialize("2xAlBo53moTE5vcLDnNimzyvVcsaklaIf0GEd4QW", "fLNaqKqodXknzCWPQEI26ecBvKKAhKvoyFbP1Brj");
+})
+
+.factory('Person', function(Parse) {
+  // yes this code is strange it's coffee's class .. extends Parse.model
+  var Person,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) {
+      for (var key in parent) {
+        if (__hasProp.call(parent, key)) {
+          child[key] = parent[key];
+        }
+      }
+
+      function ctor() {
+        this.constructor = child;
+      }
+
+      ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child;
+    };
+
+  Person = (function(_super) {
+    __extends(Person, _super);
+
+    function Person() {
+      return Person.__super__.constructor.apply(this, arguments);
+    }
+
+    Person.configure('Person', 'deviceId');
+    Person.customClassMethod = function(arg) {};
+    Person.prototype.customInstanceMethod = function(arg) {};
+
+    return Person;
+
+  })(Parse.Model);
+
+  return Person;
+})
+
+.controller('homeCtrl',function($scope, Person){
+  var person = new Person({
+    deviceId: "1"
+  });
+  person.isNew() === true;
+  person.objectId == null;
+  person.save().then(function (_person) {
+    console.log(_person);
+  })
+    
   $scope.nbUserInMeetingRoom = 0;
 
   $scope.refreshNbUser = function() { 
