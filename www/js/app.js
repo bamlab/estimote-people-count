@@ -81,14 +81,14 @@ angular.module('starter', ['ionic', 'Parse'])
           //estimote.printObject(result);
 
           for (var i = result.beacons.length - 1; i >= 0; i--) {
-             if( result.beacons[i].major == 53832 && result.beacons[i].minor==19603) {
+             //if( result.beacons[i].major == 53832 && result.beacons[i].minor==19603) {
+             if( result.beacons[i].major == 54119 && result.beacons[i].minor==30134) {
                 //console.log('found meeting room beacon '+result.beacons[i].distance+' meters away');
                 if(result.beacons[i].distance<2) {
-                  //console.log('User '+userDeveiceId+' is now in the meeting room!');
-                  console.log('User is now in the meeting room!');
+                  console.log('User '+userDeveiceId+' is now in the meeting room!');
                   //TODO: indicates to server you are in the meeting room
                   var person = new Person({
-                    deviceId: "1"
+                    deviceId: userDeveiceId
                   });
                   person.isNew() === true;
                   person.objectId == null;
