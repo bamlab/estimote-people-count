@@ -25,6 +25,12 @@ angular.module('starter', ['ionic'])
           for (var i = result.beacons.length - 1; i >= 0; i--) {
              if( result.beacons[i].major == 53832 && result.beacons[i].minor==19603) {
                 console.log('found meeting room beacon '+result.beacons[i].distance+' meters away');
+                if(result.beacons[i].distance<2) {
+                  //Get user phone UUID
+                  var uuidString = device.uuid;
+                  console.log('User '+uuidString+' is now in the meeting room!');
+                  //TODO: indicates to server you are in the meeting room
+                }
              } 
            }; 
         },
@@ -32,4 +38,7 @@ angular.module('starter', ['ionic'])
           console.log('Ranging error: ' + errorMessage) });
     
   });
+})
+.controller('homeCtrl',function($scope){
+  $scope.nbUserInMeetingRoom = 0;
 })
