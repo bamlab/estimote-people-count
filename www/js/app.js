@@ -48,7 +48,7 @@ angular.module('starter', ['ionic', 'Parse'])
       return Person.__super__.constructor.apply(this, arguments);
     }
 
-    Person.configure('Person', 'deviceId');
+    Person.configure('Person', 'deviceId', 'lastDetection');
     Person.customClassMethod = function(arg) {};
     Person.prototype.customInstanceMethod = function(arg) {};
 
@@ -88,7 +88,8 @@ angular.module('starter', ['ionic', 'Parse'])
                   console.log('User '+userDeveiceId+' is now in the meeting room!');
                   //TODO: indicates to server you are in the meeting room
                   var person = new Person({
-                    deviceId: userDeveiceId
+                    deviceId: userDeveiceId,
+                    lastDetection: Date.now()
                   });
                   person.isNew() === true;
                   person.objectId == null;
