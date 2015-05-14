@@ -29,7 +29,7 @@
       </ion-header-bar>
       <ion-content ng-controller="homeCtrl">
         <p id="user-count">x{{nbUserInMeetingRoom}}</p>
-        <button class="button button-calm">
+        <button ng-click="refreshNbUser()" class="button button-calm">
           REFRESH
         </button>
       </ion-content>

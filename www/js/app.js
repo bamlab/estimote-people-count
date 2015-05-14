@@ -40,5 +40,12 @@ angular.module('starter', ['ionic'])
   });
 })
 .controller('homeCtrl',function($scope){
+  
   $scope.nbUserInMeetingRoom = 0;
+
+  $scope.refreshNbUser = function() { 
+    console.log('in refreshNbUser');
+    //TODO: call server to get nb user in meeting room
+    $scope.nbUserInMeetingRoom += 1;
+  };
 })
