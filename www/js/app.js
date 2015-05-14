@@ -71,7 +71,7 @@ angular.module('starter', ['ionic', 'Parse'])
       var nb = 0;
       for (var i = result.length - 1; i >= 0; i--) {
         console.log(Date.now()-result[i].lastDetection);
-        if ( result[i].lastDetection > Date.now()-1000*5 ) {
+        if ( result[i].lastDetection > Date.now()-1000*1*60 ) {
           nb += 1;
         }
       };
@@ -83,6 +83,7 @@ angular.module('starter', ['ionic', 'Parse'])
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     var userDeveiceId = device.uuid;
+    $scope.currentDeviceId = userDeveiceId;
     estimote.beacons.startRangingBeaconsInRegion(
       {}, // Empty region matches all beacons.
       function(result) {
@@ -94,7 +95,8 @@ angular.module('starter', ['ionic', 'Parse'])
              //if( result.beacons[i].major == 53832 && result.beacons[i].minor==19603) {
              if( result.beacons[i].major == 53832 && result.beacons[i].minor==19603) {
                 //console.log('found meeting room beacon '+result.beacons[i].distance+' meters away');
-                if(result.beacons[i].distance<2) {
+                $scope.userDistanceToMeetingRoom = result.beacons[i].distance; 
+                if(result.beacons[i].distance<4) {
                   console.log('User '+userDeveiceId+' is now in the meeting room!');
                   //TODO: indicates to server you are in the meeting room
                   //Check if user allready exists in base
