@@ -20,7 +20,13 @@ angular.module('starter', ['ionic'])
       function(result) {
           console.log('*** Beacons ranged ***');
           console.log(result);
-          //estimote.printObject(result); 
+          //estimote.printObject(result);
+
+          for (var i = result.beacons.length - 1; i >= 0; i--) {
+             if( result.beacons[i].major == 53832 && result.beacons[i].minor==19603) {
+                console.log('found meeting room beacon '+result.beacons[i].distance+' meters away');
+             } 
+           }; 
         },
       function(errorMessage) {
           console.log('Ranging error: ' + errorMessage) });
