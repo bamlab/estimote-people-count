@@ -1,4 +1,18 @@
 /* Empty. Add your own CSS if you like */
+body *{
+	color:#444444;
+}
+img {
+	display: block;
+	width: 60%;
+	margin:auto;
+	margin-top:20px;
+	margin-bottom:20px;
+}
+h3 {
+	width: 100%;
+	text-align: center;
+}
 #user-count {
 	background: url('../img/icon_people.png') no-repeat left center;
 	background-size: contain;
@@ -16,6 +30,8 @@
 	margin-top: 15px;
 	margin-bottom: 15px;
 	padding-left:30px; 
+
+	color:#444444;
 }
 button {
  	display: block !important;

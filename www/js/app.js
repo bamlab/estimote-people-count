@@ -9,34 +9,13 @@ angular.module('starter', ['ionic', 'Parse'])
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
+    
     if(window.cordova && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
     }
     if(window.StatusBar) {
       StatusBar.styleDefault();
     }
-    estimote.beacons.startRangingBeaconsInRegion(
-      {}, // Empty region matches all beacons.
-      function(result) {
-          console.log('*** Beacons ranged ***');
-          console.log(result);
-          //estimote.printObject(result);
-
-          for (var i = result.beacons.length - 1; i >= 0; i--) {
-             if( result.beacons[i].major == 53832 && result.beacons[i].minor==19603) {
-                console.log('found meeting room beacon '+result.beacons[i].distance+' meters away');
-                if(result.beacons[i].distance<2) {
-                  //Get user phone UUID
-                  var uuidString = device.uuid;
-                  console.log('User '+uuidString+' is now in the meeting room!');
-                  //TODO: indicates to server you are in the meeting room
-                }
-             } 
-           }; 
-        },
-      function(errorMessage) {
-          console.log('Ranging error: ' + errorMessage) });
-    
   });
 })
 
@@ -80,15 +59,7 @@ angular.module('starter', ['ionic', 'Parse'])
   return Person;
 })
 
-.controller('homeCtrl',function($scope, Person){
-  var person = new Person({
-    deviceId: "1"
-  });
-  person.isNew() === true;
-  person.objectId == null;
-  person.save().then(function (_person) {
-    console.log(_person);
-  })
+.controller('homeCtrl',function($ionicPlatform, $scope, Person){
     
   $scope.nbUserInMeetingRoom = 0;
 
@@ -97,4 +68,38 @@ angular.module('starter', ['ionic', 'Parse'])
     //TODO: call server to get nb user in meeting room
     $scope.nbUserInMeetingRoom += 1;
   };
+  
+  $ionicPlatform.ready(function() {
+    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+    // for form inputs)
+    var userDeveiceId = device.uuid;
+    estimote.beacons.startRangingBeaconsInRegion(
+      {}, // Empty region matches all beacons.
+      function(result) {
+          console.log('*** Beacons ranged ***');
+          console.log(result);
+          //estimote.printObject(result);
+
+          for (var i = result.beacons.length - 1; i >= 0; i--) {
+             if( result.beacons[i].major == 53832 && result.beacons[i].minor==19603) {
+                //console.log('found meeting room beacon '+result.beacons[i].distance+' meters away');
+                if(result.beacons[i].distance<2) {
+                  //console.log('User '+userDeveiceId+' is now in the meeting room!');
+                  console.log('User is now in the meeting room!');
+                  //TODO: indicates to server you are in the meeting room
+                  var person = new Person({
+                    deviceId: "1"
+                  });
+                  person.isNew() === true;
+                  person.objectId == null;
+                  person.save().then(function (_person) {
+                    console.log(_person);
+                  })
+                }
+             } 
+           }; 
+        },
+      function(errorMessage) { console.log('Ranging error: ' + errorMessage) }
+    );
+  });
 })
